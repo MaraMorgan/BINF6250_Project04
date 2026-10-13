@@ -12,6 +12,7 @@ General structure:
 1. Adding and removing edges
 2. Constructing the graph
 3. Finding the path
+   a. Helper functions to remove reverse sequences and ensure real edges
 4. Reconstructing the sequence
 5. Calculating the statistics
 6. Outputting a FASTA file
@@ -19,10 +20,9 @@ General structure:
    
 ```
 add_edge
-add right to the list of neighbors for left in self.graph
-access self.graph[right] so right is a node even without outgoing edges
-since build_graph is what loops through the edges, we only need to define what a left and right node would be
-    self.graph left and append to right
+   add right to the list of neighbors for left in self.graph
+   access self.graph[right] so right is a node even without outgoing edges
+   since build_graph is what loops through the edges, we only need to define what a left and right node would be
     No return statement because we update attributes
 
 remove_edge
@@ -52,21 +52,24 @@ eulerian_walk
     Return the tour as a list of (k-1)-mers traversed.
 
 
+# Helper functions:
+_remove_reverse_complement_edge
+_split_tour
+
 assemble_contigs
     if a seed is given, seed the random number generator
     make a full copy of the graph so it remains unchanged during the walk
-    count the in-degree and out-degree of all the nodes
+    count the in-degree of all the nodes
+    identify possible starting nodes
     initialize an empty list for the contigs
-    round 1: for each node with more outgoing than incoming edges that still has edges
-        run eulerian_walk from that node on the copy 
-        reverse the tour
-        convert the tour to sequence and add to contigs list
-    round 2: for every node that still has edges left
-        run eulerian_walk from that node on the copy
-        reverse the tour
-        convert the tour to a sequence and add to contigs list
-    return the list of contigs
-
+   
+    for each node, iterate over the possible starts
+      then iterate over all other nodes
+      check if there are any unised nodes
+         call eulerian_walk if yes
+         reverse sequence
+         split into contigs
+      return the list of contigs
 
 
 tour_to_sequence
@@ -78,35 +81,48 @@ tour_to_sequence
  
 
 get_assembly_stats
-
+   calculate:
+      number of contigs: total contig count,
+      total contig length: sum of all lengths,
+      the longest and shortest contig: Sort from longest to shortest and display longest and shortest,
+      mean length: total length / # contigs, 
+      n50: initialize, iterate through all sorted contigs, add length to total, stop when a contig reaches half the assembly length
+   if there are no contigs
+      return zero
+   return stats dictionary
 
 write_fasta
+   number the contigs
+   iterate through contigs
+      add the header for each
+      for each contig, wrap the line so they aren't too long
+         return the output file
 
 ```
 
 
-
-Talking points for the successes and struggles section: DRAFT
-
 # Successes
-Adding and removing edges, and constructing the graph, was very straightforward. 
+As a group, we were able to meet and discuss our ideas behind the concepts of de Bruijn graph assembly, recursion, and object oriented programming. Despite conflicting schedules between all group members, effective communication and collaboration was not impeded. 
 
-Conflicting schedules between all group members did not hinder effective communication and collaboration 
+Together, we talked through and wrote the functions to add edges, remove edges, and constructing the graph. We then independently wrote the rest of the functions and compared with each other, talking through points some of us may not have thought of. This was very beneficial to us, because we all took slightly different approaches, and combining them allowed us to think through what went where and why. 
+
+Overall, our group worked very well together to think through and implement this project. 
+
+
 
 # Struggles
 Once again, there were some slight hiccups with using GitHub, but we all get better with each project as we gain familiarity. 
 
-The concept of recursion, thinking in object oriented programming
+While brainstorming together, there was some initial confusion on how to handle duplicate edges, which was resolved by checking if the edge was already in the graph.
 
-Confusion on handling duplicate edges 
+Our biggest struggle was finding a bug in our code that connected invalid edges in our `assemble_contigs` function, creating fake contigs. There was intensive debugging involved, and we decided we needed to implement more checks within each function to make sure everything operates as it should. The bug ended up being resolved through a helper function that checks valid node paths in a copy of the graph against the original graph, preventing invalid paths from connecting.
 
-Where to incorporate generators
 
 # Personal Reflections
 ## Group Leader: 
 ### Mara
-This was my second time as a group leader, and I feel it was easier to manage than the first time. 
-My collaborators contributed some excellent considerations while we were talking through the concepts outlined in the lecture, particularly the Eulerian walk and recursion. 
+This was my second time as a group leader, and I feel it was easier to manage than the first time, especially keeping up to date on pull requests and checking my collaborators code. 
+My collaborators contributed some excellent considerations while we were talking through the concepts outlined in the lecture, particularly the Eulerian walk and recursion. I am concurrently taking Genomics, and the first project was based on de Bruijn graph assembly, so I had the concepts still fresh in my mind and they translated well, but this project was definitely more involved. 
 
 
 ## Collaborators:
