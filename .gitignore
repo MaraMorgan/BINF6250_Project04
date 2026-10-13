@@ -1,0 +1,12 @@
+# data and large outputs
+data/
+*.fq
+*.fq.gz
+*.fastq.gz
+genome_assembly.fasta
+test_output.fasta
+
+# system and editor files
+.DS_Store
+.ipynb_checkpoints/
+.idea/
