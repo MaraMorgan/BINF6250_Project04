@@ -102,6 +102,7 @@ write_fasta
 
 ## Output:
 A file containing the genome assembly statistics
+
 Stats include:
 * A header with analysis date, input file, and kmer size
 * Input data
