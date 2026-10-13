@@ -100,6 +100,20 @@ write_fasta
 
 ```
 
+## Output:
+A file containing the genome assembly statistics
+Stats include:
+* A header with analysis date, input file, and kmer size
+* Input data
+* * Ex) Number of reads, average read length, total sequencing data
+* De Bruijn Graph Construction
+* * Ex) Graph nodes and edges, out degrees
+* Assembly Results
+* * Ex) Total number of contigs and assembly length, output dictionary from `get_assembly_stats`
+* Top 20 Longest Contigs
+* Contig Length Distribution
+* Timing Summary
+
 
 # Successes
 As a group, we were able to meet and discuss our ideas behind the concepts of de Bruijn graph assembly, recursion, and object oriented programming. Despite conflicting schedules between all group members, effective communication and collaboration was not impeded. 
